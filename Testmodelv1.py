@@ -3,6 +3,8 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras import layers, models
 from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import ReduceLROnPlateau
+from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 
 file_path = "dataset_channel3_final.h5"
@@ -30,6 +32,12 @@ X_train = X_data[:train_split]
 Y_train = Y_data[:train_split]
 X_val = X_data[train_split:]
 Y_val = Y_data[train_split:]
+
+
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_val = scaler.transform(X_val)
 
 # X_test = X_data[:train_split]
 # Y_test = Y_data[:train_split]
@@ -71,12 +79,15 @@ batch_size = 32
 
 early_stop = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
 
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6)
+
 history = model.fit(
     X_train, 
     Y_train,
     validation_data=(X_val, Y_val),
     epochs=epochs,
-    batch_size=batch_size
+    batch_size=batch_size,
+    callbacks=[early_stop, reduce_lr]
 )
 
 # --------------------------------------------------------------
