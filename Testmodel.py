@@ -29,7 +29,6 @@ print(f"Y_data shape: {Y_data.shape}, dtype: {Y_data.dtype}")
 print("X_data sample:\n", X_data[:5])
 print("Y_data sample:\n", Y_data[:5])
 
-
 train_split = int(num_samples * 0.7)
 val_split = int(num_samples * 0.9)
 
@@ -52,15 +51,22 @@ X_train = scaler.fit_transform(X_train)
 X_val = scaler.transform(X_val)
 X_test = scaler.transform(X_test)
 
-scaler_Y = MinMaxScaler()
-Y_train = scaler_Y.fit_transform(Y_train)
-Y_val = scaler_Y.transform(Y_val)
+scaler_Y_0 = MinMaxScaler()
+scaler_Y_1 = MinMaxScaler()
+
+Y_train[:, 0] = scaler_Y_0.fit_transform(Y_train[:, 0].reshape(-1, 1)).flatten()
+Y_train[:, 1] = scaler_Y_1.fit_transform(Y_train[:, 1].reshape(-1, 1)).flatten()
+
+Y_val[:, 0] = scaler_Y_0.transform(Y_val[:, 0].reshape(-1, 1)).flatten()
+Y_val[:, 1] = scaler_Y_1.transform(Y_val[:, 1].reshape(-1, 1)).flatten()
 
 
 
 model = models.Sequential([
+    layers.Input(shape=(52,)),
+    
     # Layer 1: 32 neurons
-    layers.Dense(32, input_shape=(52,)),
+    layers.Dense(32),
     layers.BatchNormalization(),
     layers.Activation('relu'),
     
@@ -75,7 +81,7 @@ model = models.Sequential([
     layers.Activation('relu'),
     
     # Output layer: 2 neurons for the regression targets
-    layers.Dense(2, activation='softplus')
+    layers.Dense(2, activation='relu')
 ])
 
 # --------------------------------------------------------------
@@ -93,7 +99,7 @@ batch_size = 32
 
 early_stop = EarlyStopping(monitor='val_loss', patience=20, restore_best_weights=True)
 
-reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.4, patience=7, min_lr=1e-7)
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.4, patience=7, min_lr=1e-8)
 
 history = model.fit(
     X_train, 
@@ -116,9 +122,12 @@ print(f"Current learning rate: {current_lr}")
 
 
 predictions = model.predict(X_test)
-predictions_original = scaler_Y.inverse_transform(predictions)
+
+predictions_original = np.zeros_like(predictions)
+predictions_original[:, 0] = scaler_Y_0.inverse_transform(predictions[:, 0].reshape(-1, 1)).flatten()
+predictions_original[:, 1] = scaler_Y_1.inverse_transform(predictions[:, 1].reshape(-1, 1)).flatten()
 
 print("Predictions shape:", predictions.shape)
 print("First 5 predictions:\n", predictions[:5])
-print("First 5 predictions:\n", predictions_original[:5])
-print("First 5 predictions answers:\n", Y_test[:5])
+print("First 5 original predictions:\n", predictions_original[:5])
+print("First 5 true values (original scale):\n", Y_test[:5])
