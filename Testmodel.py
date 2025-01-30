@@ -100,7 +100,7 @@ history = model.fit(
 # --------------------------------------------------------------
 # 5. Evaluate the model
 # --------------------------------------------------------------
-val_loss, val_mae = model.evaluate(X_val, Y_val, verbose=0)
+val_loss, val_mae = model.evaluate(X_val_scaled, Y_val_scaled, verbose=0)
 print(f"Validation MSE: {val_loss:.4f}, Validation MAE: {val_mae:.4f}")
 
 current_lr = model.optimizer.learning_rate.numpy()
