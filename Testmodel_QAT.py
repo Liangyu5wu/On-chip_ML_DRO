@@ -28,12 +28,7 @@ X_data = dataset[:, :num_features][:, ::20].astype(np.float32)
 # X_data = dataset[:, :num_features].astype(np.float32)
 Y_data = dataset[:, num_features:].astype(np.float32)
 
-# Y_data = np.zeros_like(new_Y_data)
-# Y_data[:, 0] = new_Y_data[:, 0]
-# Y_data[:, 1] = new_Y_data[:, 1]  
-
 new_num_features = X_data.shape[1]
-
 print(f"num_samples: {num_samples}, Original num_features: {num_features}, New num_features: {new_num_features}")
 print(f"X_data shape: {X_data.shape}, dtype: {X_data.dtype}")
 print(f"Y_data shape: {Y_data.shape}, dtype: {Y_data.dtype}")
@@ -135,10 +130,8 @@ print("First 5 original predictions:\n", predictions_original[:5])
 print("First 5 true values (original scale):\n", Y_test[:5])
 
 true_C = Y_test[:, 0]
-# true_C = np.sqrt(Y_test[:, 0])
 true_S = Y_test[:, 1]
 
-# pred_C = predictions_original[:, 0] * predictions_original[:, 1]
 pred_C = predictions_original[:, 0]
 pred_S = predictions_original[:, 1]
 
