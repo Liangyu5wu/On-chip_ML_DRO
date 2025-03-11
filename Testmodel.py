@@ -24,6 +24,13 @@ Y_data = dataset[:, num_features:].astype(np.float32)
 
 new_num_features = X_data.shape[1]
 
+print(f"num_samples: {num_samples}, Original num_features: {num_features}, New num_features: {new_num_features}")
+print(f"X_data shape: {X_data.shape}, dtype: {X_data.dtype}")
+print(f"Y_data shape: {Y_data.shape}, dtype: {Y_data.dtype}")
+
+# print("X_data sample:\n", X_data[:5])
+# print("Y_data sample:\n", Y_data[:5])
+
 train_split = int(num_samples * 0.7)
 val_split = int(num_samples * 0.9)
 
@@ -35,6 +42,10 @@ Y_val = Y_data[train_split:val_split]
 
 X_test = X_data[val_split:]
 Y_test = Y_data[val_split:]
+
+print(X_train.shape)
+print(X_val.shape)
+print(X_test.shape)
 
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
@@ -80,6 +91,7 @@ model = models.Sequential([
 # 3. Compile the model
 # --------------------------------------------------------------
 model.compile(optimizer='adam', loss='mse', metrics=['mae'])
+model.summary()
 
 epochs = 200
 batch_size = 32
