@@ -70,22 +70,18 @@ Y_val_scaled[:, 1] = scaler_Y_1.transform(Y_val[:, 1].reshape(-1, 1)).flatten()
 model = models.Sequential([
     layers.Input(shape=(52,)),
     
-    # layers.Dense(32),
-    # layers.BatchNormalization(),
-    # layers.Activation('relu'),
+    layers.Dense(32),
+    layers.BatchNormalization(),
+    layers.Activation('relu'),
     
-    
-    # Layer 2: 16 neurons
-    layers.Dense(10),
+    layers.Dense(16),
     layers.BatchNormalization(),
     layers.Activation('relu'),
 
-    # Layer 3: 8 neurons
     layers.Dense(8),
     layers.BatchNormalization(),
     layers.Activation('relu'),
-    
-    # Output layer: 2 neurons for the regression targets
+
     layers.Dense(2, activation='relu')
 ])
 
