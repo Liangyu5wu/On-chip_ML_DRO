@@ -1,10 +1,28 @@
-import hls4ml
-from tensorflow.keras import layers, models
+import h5py
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras import models
 from tensorflow.keras.models import load_model
+from tensorflow.keras.losses import MeanSquaredError
+from tensorflow.keras.metrics import MeanAbsoluteError
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from qkeras import QDense, QActivation, quantizers
+import hls4ml
 
 
+# tf.config.run_functions_eagerly(True)
 
-# model = load_model("QAT_32_16_8_model.h5")
+# custom_objects = {
+#     'QDense': QDense,
+#     'QActivation': QActivation,
+#     'quantized_bits': quantizers.quantized_bits,
+#     'quantized_relu': quantizers.quantized_relu,
+#     'MeanSquaredError': MeanSquaredError,
+#     'MeanAbsoluteError': MeanAbsoluteError
+# }
+
+# model = load_model("QAT_32_16_8_model_v3.h5", custom_objects=custom_objects)
+
 model = load_model("32_16_8_model.h5")
 
 config = hls4ml.utils.config_from_keras_model(model, granularity='model', backend='Vitis')
