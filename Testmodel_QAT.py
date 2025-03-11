@@ -66,6 +66,30 @@ Y_train_scaled[:, 1] = scaler_Y_1.fit_transform(Y_train[:, 1].reshape(-1, 1)).fl
 Y_val_scaled[:, 0] = scaler_Y_0.transform(Y_val[:, 0].reshape(-1, 1)).flatten()
 Y_val_scaled[:, 1] = scaler_Y_1.transform(Y_val[:, 1].reshape(-1, 1)).flatten()
 
+# model = models.Sequential([
+#     layers.Input(shape=(52,)),
+
+#     # QDense(32, kernel_quantizer=quantizers.quantized_bits(8, 0, 1, alpha=1.0), 
+#     #        bias_quantizer=quantizers.quantized_bits(8, 0, 1, alpha=1.0)),
+#     # layers.BatchNormalization(),
+#     # QActivation(activation=quantizers.quantized_relu(8)),
+
+#     QDense(10, kernel_quantizer=quantizers.quantized_bits(8, 0, 1, alpha=1.0), 
+#            bias_quantizer=quantizers.quantized_bits(8, 0, 1, alpha=1.0)),
+#     layers.BatchNormalization(),
+#     QActivation(activation=quantizers.quantized_relu(8)),
+
+#     QDense(8, kernel_quantizer=quantizers.quantized_bits(8, 0, 1, alpha=1.0), 
+#            bias_quantizer=quantizers.quantized_bits(8, 0, 1, alpha=1.0)),
+#     layers.BatchNormalization(),
+#     QActivation(activation=quantizers.quantized_relu(8)),
+
+#     QDense(2, kernel_quantizer=quantizers.quantized_bits(8, 0, 1, alpha=1.0), 
+#            bias_quantizer=quantizers.quantized_bits(8, 0, 1, alpha=1.0)),
+#     QActivation(activation=quantizers.quantized_relu(8)),
+# ])
+
+
 
 model = models.Sequential([
     layers.Input(shape=(52,)),
